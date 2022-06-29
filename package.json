@@ -1,0 +1,33 @@
+{
+  "name": "api-music",
+  "version": "1.0.0",
+  "description": "app listening",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon index.js"
+  },
+  "author": "dang",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-fileupload": "^1.3.1",
+    "fcm-node": "^1.6.1",
+    "firebase": "^9.6.11",
+    "firebase-admin": "^10.1.0",
+    "googleapis": "^39.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "nodemailer": "^6.7.5",
+    "npm-watch": "^0.11.0",
+    "pg": "^8.7.3",
+    "streamjs": "^1.6.4",
+    "swagger-ui-express": "^4.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}

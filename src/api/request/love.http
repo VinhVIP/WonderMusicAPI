@@ -1,0 +1,10 @@
+### Yêu thích bài hát
+POST http://localhost:8000/api/v0/love/follow/53
+Content-Type: application/json
+Authorization: beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9hY2NvdW50IjoiMSIsImlhdCI6MTY1MDkwODExMCwiZXhwIjoxNjUxNzcyMTEwfQ.Qc44z7r7pVBPYgd6ObX88XzNvLYhwGh0chOXlZsY0hQ
+
+
+### Danh sách yêu thích bài hát
+GET http://localhost:8000/api/v0/love/love-song
+Content-Type: application/json
+Authorization: beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9hY2NvdW50IjoiMSIsImlhdCI6MTY1MDkwODExMCwiZXhwIjoxNjUxNzcyMTEwfQ.Qc44z7r7pVBPYgd6ObX88XzNvLYhwGh0chOXlZsY0hQ

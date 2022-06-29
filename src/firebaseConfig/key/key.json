@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "musicapiandroid",
+  "private_key_id": "a614aa6c6cf4c24126ea8caafaab82d59f5f2945",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC6cyKNVq3Y6tHp\nIQaGn2RgsWLVhbqyAZfGYOE0pXeCGjn629GyTGs5E+KxpgJRr7/R2L0Yy5/C3WYS\nuw1cnJuM2Tx36xg1CkNERJUXVfbswcJNMvZmRz+lgxLi9YHoODhgZ+Uoml7Fwb/1\nIxNr70Dh4Crn3GUL8jousHl2d41YlBCW00J4NeThKHtLzSvm+IeV2xGTChj52Zer\nBn0KVfSkkNvpUi6rOIfNJSeG3mG6PJ9HCTzC42kQFsjf+q63i1rAkR3cv/dVisJ1\n6P4/43yZGf+IMSnEFay4uTKLnSVp8xI3kMQ5RnwX8S3jz3HQa85jffD2KKoC7wOl\nAhPp9SqDAgMBAAECggEARWiJC06iRycbX4sAz+rURj6iyVQQLSX0p0/3Zk7Wz2MO\nBHoCdTqHi+cANBvVry0a3nat5mYfIj6jOgPSNJDEQ0m3ffjRuSUJ54cUbWx+EKMM\nvwpiua56XhYOWNkGNDmBmznyEAxvjXTUDeCx4TNe1vdJYaklIK5axHjDrrtQrhFE\nEv5e4O3S3oOpHgWYXr9onReZjCiArQ6nzD726DeuwmBTys9uzFmZlf6m7utIYrkS\ngl1ZkJ4Xdql/Qx8LwJc/nkN3XYZ3SBsEokhSu9Qy2YAozs0Og5ZuMouAvTZV7KNY\nRxF9PN6LHGboG9pFr9Ds96joHOBh9zzz7B6GkwUK8QKBgQD+YodOA+x6LCQycHEZ\n6bd6rIRZxqYZba8cg2D5AuvHBbd+QcG7jCm9FQcBc0DnhV9w1fwKp6Y+5QuczQ+G\nWxTQ86Vt2Ph7JezmyGQwsrWKno6SZgl8OtcOG/99Q7aShl0ciLp9+Ri3VYYsm0/8\nlHxg89isGg95uE1jzpTPIDkZGwKBgQC7oi+qt1SNV1w916tJ/MC0o2kYW78p+cin\nzdQCT7oathnSuXvt5z2nmmNqFjx0fNowPejhPzktLqdXd4M8QojbZl7qhjssaViz\nbFNb+67V1DE5dJG1EDp0wWmUc3I8RM/ciYP5T8NpKnJCyJqjz+Gm/r3Acx7LKb8x\nNUpJtsxyuQKBgCXwL9m0wBngZ22WU2fX8WM8Q2jYNYFpWEpaVaYNh3hhI+KSkAAW\ngUsPzcGrnKxqubcsUrCMHEEZC8hQ1NXm043uKGffif9jwpcQn9CbdnO7/etbiGKc\nq+IQzuOxq5LisxREV/vdoJAHE0Gn0CANTRdwhon0QQaYNAKElrDlT16tAoGAWKou\nbjSNvvCuRQb6CU9n3LRvgDQypGpFmI4aBjGYlvDASSSfXG9uYhoBqmrxjHZHQI6w\n0mfm4+Ps7dcq67nhJBQ+/AIMSlNJuBeTWJ8ZIjBQRn9AL1iI1w1ij+Tx8Wru8p8E\n/zXi+Ho3XjmfYZNlZV1xW1TLE2QZ1e4Buc2o1PkCgYBiSOPArP5qmr4OM+c+gobN\n6KkOqU7pjYWiSJeQLUR2DuWDx5OWvRcvgAldKIkH+6sy3NX3fxzo6k0NH7VjC1Mb\n0hDjxpMX0tYi9GK9ixvPOkMA3apD4eiUfHyfhVaka9TRm34fcmbbu+j4e2G3Xby+\nr6lwPRMtqI7CQXiBXGSPEA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-akxll@musicapiandroid.iam.gserviceaccount.com",
+  "client_id": "111277834586248277535",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-akxll%40musicapiandroid.iam.gserviceaccount.com"
+}

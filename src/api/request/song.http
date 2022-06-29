@@ -1,0 +1,69 @@
+### Test
+GET http://localhost:8000/api/v0/song/test
+Content-Type: application/json
+
+
+### Thêm bài hát
+POST http://localhost:8000/api/v0/song/
+Content-Type: application/json
+Authorization: beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9hY2NvdW50IjoiMSIsImlhdCI6MTY1MDkwODExMCwiZXhwIjoxNjUxNzcyMTEwfQ.Qc44z7r7pVBPYgd6ObX88XzNvLYhwGh0chOXlZsY0hQ
+
+{
+    "name_song": "Phia sau co ay",
+    "link": "folder/music/rap",
+    "id_album": "1",
+    "types": "111125",
+    "accounts": ""
+}
+
+### Cập nhật bài hát
+PUT http://localhost:8000/api/v0/song/41
+Content-Type: application/json
+Authorization: beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9hY2NvdW50IjoiMSIsImlhdCI6MTY1MDkwMTA1NywiZXhwIjoxNjUxNzY1MDU3fQ.n4HVkrUeK9ULZGBtY0IdFt-7TPntebX4oKsolGPEKAQ
+
+{
+    "name_song": "TEST456Nhieuaccount123",
+    "link": "folder/music/rap",
+    "types": "1111",
+    "accounts": "1"
+}
+
+### Tăng listen 
+POST  http://localhost:8000/api/v0/song/listen/44
+Content-Type: application/json
+Authorization: beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9hY2NvdW50IjoiMSIsImlhdCI6MTY1MDkwMTA1NywiZXhwIjoxNjUxNzY1MDU3fQ.n4HVkrUeK9ULZGBtY0IdFt-7TPntebX4oKsolGPEKAQ
+
+
+### Lấy thông tin bài hát
+GET  http://localhost:8000/api/v0/song/107
+Content-Type: application/json
+Authorization: beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9hY2NvdW50IjoiMSIsImlhdCI6MTY1MDkwMTA1NywiZXhwIjoxNjUxNzY1MDU3fQ.n4HVkrUeK9ULZGBtY0IdFt-7TPntebX4oKsolGPEKAQ
+
+
+### Lấy danh sách bài hát xem nhiều
+GET  http://localhost:8000/api/v0/song/best-list
+Content-Type: application/json
+Authorization: beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9hY2NvdW50IjoiMSIsImlhdCI6MTY1MDkwMTA1NywiZXhwIjoxNjUxNzY1MDU3fQ.n4HVkrUeK9ULZGBtY0IdFt-7TPntebX4oKsolGPEKAQ
+
+
+### Tạo token fake
+POST http://localhost:8000/api/v0/playlist/fake
+Content-Type: application/json
+
+{
+    "id_account": "3"
+}
+
+### Lấy danh sách bài hát theo thể loại
+GET  http://localhost:8000/api/v0/song/type/5
+Content-Type: application/json
+
+### Xóa bản thân ra khỏi bài hát được tag
+DELETE  http://localhost:8000/api/v0/song/deleteSinger/42
+Content-Type: application/json
+
+### Xóa bài hát
+DELETE  http://localhost:8000/api/v0/song/deleteSong/66
+Content-Type: application/json
+Authorization: beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9hY2NvdW50IjoiMSIsImlhdCI6MTY1MTE1ODUzNiwiZXhwIjoxNjUyMDIyNTM2fQ.4enzNBr-uqNRb0JGPOT6_B7Jeui6y8VG3mQ3Scr_DDY
+

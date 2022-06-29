@@ -1,0 +1,59 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Sample spec",
+        "description": "Sample spec for Swagger",
+        "termsOfService": "http://swagger.io/terms/"
+    },
+    "basePath": "/api/v0",
+    "tags": [
+        {
+            "name": "account",
+            "description": "API for Account"
+        },
+        {
+            "name": "post",
+            "description": "API for Post"
+        },
+        {
+            "name": "tag",
+            "description": "API for Tag"
+        }
+    ],
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "bearerAuth": {
+            "type": "apiKey",
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "paths": {
+        "/student/all": {
+            "get": {
+                "tags": [
+                    "account"
+                ],
+                "summary": "Lấy danh sách tất cả tài khoản",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "Lấy danh sách thành công"
+                    }
+                }
+            }
+        }
+    }
+}
