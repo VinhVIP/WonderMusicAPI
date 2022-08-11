@@ -1,17 +1,21 @@
 const express = require('express')
 const router = express.Router()
 const Auth = require('../../../middleware/auth')
-const Playlist_Song = require('../module/playlistSong')
 const Comment = require('../module/comment')
 const Notification = require('../module/notification')
 const sendNotification = require('../../../firebaseConfig/sendNotification')
 const Account = require('../module/account')
+const Song = require('../module/song')
 
+
+/**
+ * Lấy tất cả bình luận trong 1 bài hát
+ */
 router.get('/:id_song/comment', async(req, res, next) => {
     const id_song = req.params.id_song
     let data = []
 
-    const songExists = await Playlist_Song.hasSong(id_song)
+    const songExists = await Song.hasSong(id_song)
     if (songExists) {
         const listParent = await Comment.listCommentParent(id_song)
         for (let i = 0; i < listParent.length; i++) {
@@ -53,24 +57,9 @@ router.get('/:id_song/comment', async(req, res, next) => {
     }
 })
 
-router.get('/comment/:id_cmt', async(req, res, next) => {
-    const id_cmt = req.params.id_cmt
-
-    const cmtExists = await Comment.has(id_cmt)
-    if (cmtExists) {
-        const data = await Comment.getComment(id_cmt)
-
-        return res.status(200).json({
-            message: 'Lấy 1 bình luận thành công',
-            data
-        })
-    } else {
-        return res.status(404).json({
-            message: 'Bình luận này không tồn tại'
-        })
-    }
-})
-
+/**
+ * Lấy bình luận cha và các bình luận con của nó
+ */
 router.get('/comment_parent/:id_cmt', async(req, res, next) => {
     const id_cmt = req.params.id_cmt
 
@@ -79,7 +68,7 @@ router.get('/comment_parent/:id_cmt', async(req, res, next) => {
         const data = await Comment.getComment(id_cmt)
         const account_cmt_parent = await Account.selectId(data.id_account)
         data['account'] = account_cmt_parent
-        const listChildren = await Comment.getListCommentChildren(id_cmt)
+        const listChildren = await Comment.listCommentChildren(id_cmt)
 
         let listCmtChildren = []
         for (let account_children of listChildren) {
@@ -101,30 +90,37 @@ router.get('/comment_parent/:id_cmt', async(req, res, next) => {
     }
 })
 
+/**
+ * Thêm bình luận vào bài hát
+ * Tài khoản bị khóa k thể bình luận
+ */
 router.post('/:id_song/comment', Auth.authenGTUser, async(req, res, next) => {
     try {
         const content = req.body.content.trim()
-        const id_account = Auth.getTokenData(req).id_account
+        const id_account = Auth.getUserID(req)
         const id_song = req.params.id_song
 
-        // Tài khoản bị khóa
-        // if (acc.account_status != 0) {
-        //     return res.status(403).json({
-        //         message: 'Tài khoản đã bị khóa, không thể bình luận'
-        //     })
-        // }
+        let acc = await Account.selectId(id_account)
 
-        const songExists = await Playlist_Song.hasSong(id_song)
+        // Tài khoản bị khóa
+        if (acc.account_status != 0) {
+            return res.status(403).json({
+                message: 'Tài khoản đã bị khóa, không thể bình luận'
+            })
+        }
+
+        const songExists = await Song.hasSong(id_song)
         if (songExists) {
             if (content) {
-                const id_account_song = await Comment.getIdAccountSong(id_song)
+                let id_account_song = await Song.getAuthorOfSong(id_song)
+
                 if (+id_account_song !== +id_account) {
-                    const account_name = await Comment.getNameAccount(id_account)
-                    const hasToken = await Comment.hasToken(id_account_song)
-                    const token_device = hasToken ? await Comment.getTokenDevice(id_account_song) : null
+                    const account_name = acc.account_name
+                    const hasToken = await Account.hasDeviceToken(id_account_song)
+                    const token_device = hasToken ? await Account.getAccountDevice(id_account_song) : null
                     const message = {
                         data: {
-                            title: `Tài khoản của bạn ${account_name} đã bình luận bài hát của bạn`,
+                            title: `Tài khoản ${account_name} đã bình luận bài hát của bạn`,
                             content: content,
                             action: `comment/${id_song}`
                         },
@@ -135,6 +131,7 @@ router.post('/:id_song/comment', Auth.authenGTUser, async(req, res, next) => {
                         await sendNotification(message)
                     }
                 }
+
                 const comment = await Comment.addCommentParent(id_account, id_song, content)
                 return res.status(200).json({
                     message: "Bình luận thành công",
@@ -157,19 +154,26 @@ router.post('/:id_song/comment', Auth.authenGTUser, async(req, res, next) => {
         return res.sendStatus(500)
     }
 })
+
+/**
+ * Phản hồi bình luận
+ */
 router.post('/:id_song/comment/:id_cmt_parent/reply', Auth.authenGTUser, async(req, res, next) => {
     try {
         const content = req.body.content.trim()
-        const id_account = Auth.getTokenData(req).id_account
+        const id_account = Auth.getUserID(req)
         const id_song = req.params.id_song
         const id_cmt_parent = req.params.id_cmt_parent
 
+        let acc = await Account.selectId(id_account)
+
         // Tài khoản bị khóa
-        // if (acc.account_status != 0) {
-        //     return res.status(403).json({
-        //         message: 'Tài khoản đã bị khóa, không thể bình luận'
-        //     })
-        // }
+        if (acc.account_status != 0) {
+            return res.status(403).json({
+                message: 'Tài khoản đã bị khóa, không thể bình luận'
+            })
+        }
+
         const idSongOfCmt = await Comment.has(id_cmt_parent)
         if (idSongOfCmt) {
             if (idSongOfCmt.id_song != id_song) {
@@ -183,19 +187,21 @@ router.post('/:id_song/comment/:id_cmt_parent/reply', Auth.authenGTUser, async(r
             })
         }
 
-        const songExists = await Playlist_Song.hasSong(id_song)
+        const songExists = await Song.hasSong(id_song)
         if (songExists) {
             if (content) {
                 const comment = await Comment.addCommentChildren(id_account, id_song, content, id_cmt_parent)
-                const id_account_parent = await Comment.hasIdAccount(id_cmt_parent)
+
+                let comment_parent = await Comment.getComment(id_cmt_parent)
+                const id_account_parent = comment_parent.id_account
 
                 if (+id_account_parent !== +id_account) {
-                    const account_name = await Comment.getNameAccount(id_account)
-                    const hasToken = await Comment.hasToken(id_account_parent)
-                    const token_device = hasToken ? await Comment.getTokenDevice(id_account_parent) : null
+                    const account_name = acc.account_name
+                    const hasToken = await Account.hasDeviceToken(id_account_parent)
+                    const token_device = hasToken ? await Account.getAccountDevice(id_account_parent) : null
                     const message = {
                         data: {
-                            title: `Tài khoản của bạn ${account_name} đã trả lời bình luận của bạn`,
+                            title: `Tài khoản ${account_name} đã trả lời bình luận của bạn`,
                             content: content,
                             action: `reply/${id_song}/${id_cmt_parent}`
                         },
@@ -228,20 +234,27 @@ router.post('/:id_song/comment/:id_cmt_parent/reply', Auth.authenGTUser, async(r
     }
 })
 
+
+/**
+ * Sửa bình luận
+ */
 router.put('/:id_song/comment/:id_cmt/update', Auth.authenGTUser, async(req, res, next) => {
     try {
         const content = req.body.content.trim()
-        const id_account = Auth.getTokenData(req).id_account
+        const id_account = Auth.getUserID(req)
         const id_song = req.params.id_song
         const id_cmt = req.params.id_cmt
 
+        let acc = await Account.selectId(id_account)
+
         // Tài khoản bị khóa
-        // if (acc.account_status != 0) {
-        //     return res.status(403).json({
-        //         message: 'Tài khoản đã bị khóa, không thể bình luận'
-        //     })
-        // }
-        const songExists = await Playlist_Song.hasSong(id_song)
+        if (acc.account_status != 0) {
+            return res.status(403).json({
+                message: 'Tài khoản đã bị khóa, không thể sửa bình luận'
+            })
+        }
+
+        const songExists = await Song.hasSong(id_song)
         if (!songExists) {
             res.status(404).json({
                 message: 'Bài hát không tồn tại'
@@ -261,7 +274,9 @@ router.put('/:id_song/comment/:id_cmt/update', Auth.authenGTUser, async(req, res
             })
         }
 
-        const id_account_comment = await Comment.selectAccountComment(id_cmt)
+        let comment = await Comment.getComment(id_cmt)
+        const id_account_comment = comment.id_account
+
         if (+id_account === +id_account_comment) {
             if (content) {
                 const comment = await Comment.updateComment(id_cmt, content)
@@ -286,19 +301,25 @@ router.put('/:id_song/comment/:id_cmt/update', Auth.authenGTUser, async(req, res
 })
 
 
+/**
+ * Xóa bình luận
+ */
 router.delete('/:id_song/comment/:id_cmt/delete', Auth.authenGTUser, async(req, res, next) => {
     try {
-        const id_account = Auth.getTokenData(req).id_account
+        const id_account = Auth.getUserID(req)
         const id_song = req.params.id_song
         const id_cmt = req.params.id_cmt
 
+        let acc = await Account.selectId(req)
+
         // Tài khoản bị khóa
-        // if (acc.account_status != 0) {
-        //     return res.status(403).json({
-        //         message: 'Tài khoản đã bị khóa, không thể bình luận'
-        //     })
-        // }
-        const songExists = await Playlist_Song.hasSong(id_song)
+        if (acc.account_status != 0) {
+            return res.status(403).json({
+                message: 'Tài khoản đã bị khóa, không thể xóabình luận'
+            })
+        }
+
+        const songExists = await Song.hasSong(id_song)
         if (!songExists) {
             res.status(404).json({
                 message: 'Bài hát không tồn tại'
@@ -312,15 +333,17 @@ router.delete('/:id_song/comment/:id_cmt/delete', Auth.authenGTUser, async(req, 
             })
         }
 
-        const id_account_comment = await Comment.selectAccountComment(id_cmt)
+        let comment = await Comment.getComment(id_cmt)
+        const id_account_comment = comment.id_account
+
         if (+id_account === +id_account_comment) {
             const comment = await Comment.delete(id_cmt)
             return res.status(200).json({
-                message: "Xóa tất cả bình luận thành công",
+                message: "Xóa bình luận thành công",
             })
         } else {
             return res.status(401).json({
-                message: "Không phải chính chủ, không được đổi cmt",
+                message: "Không phải chính chủ, không được xóa",
             })
         }
     } catch (error) {

@@ -1,139 +1,166 @@
-const { refreshToken } = require('firebase-admin/app');
-const { google } = require('googleapis');
-const fs = require('fs');
-const path = require('path')
-const { Duplex } = require('stream');
-require('dotenv').config();
+const { google } = require('googleapis')
+const { Duplex } = require('stream')
+require('dotenv').config()
 
+const MyDrive = {}
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI;
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
-const FOLDERSONG = process.env.FOLDERSONG;
-const FOLDERIMG = process.env.FOLDERIMG;
+const KEYFILEPATH = "drive_key.json"
+const SCOPES = ['https://www.googleapis.com/auth/drive']
 
-const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
-oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+const FOLDER_SONG = process.env.FOLDERSONG
+const FOLDER_MV = process.env.FOLDERMV
+const FOLDER_IMG = process.env.FOLDERIMG
 
-const drive = google.drive({
-    version: 'v3',
-    auth: oauth2Client
+const auth = new google.auth.GoogleAuth({
+    keyFile: KEYFILEPATH,
+    scopes: SCOPES
 })
 
 function bufferToStream(buffer) {
-    const duplexStream = new Duplex();
-    duplexStream.push(buffer);
-    duplexStream.push(null);
-    return duplexStream;
+    const duplexStream = new Duplex()
+    duplexStream.push(buffer)
+    duplexStream.push(null)
+    return duplexStream
 }
 
 
-const MyDrive = {};
+MyDrive.uploadImage = async(file, filename) => {
+    const driveService = google.drive({ version: 'v3', auth })
 
-MyDrive.setFilePublic = async (fileId) => {
-    try {
-        await drive.permissions.create({
-            fileId: fileId,
-            requestBody: {
-                role: 'reader',
-                type: 'anyone'
-            }
-        })
-        return true;
-    } catch (error) {
-        console.log(error);
-        return false;
+    let fileMetaData = {
+        'name': filename + '.png',
+        'parents': [FOLDER_IMG]
     }
+
+    let media = {
+        mimeType: 'image/jpeg',
+        body: bufferToStream(file.data)
+    }
+
+    let response = await driveService.files.create({
+        resource: fileMetaData,
+        media: media,
+        fields: 'id'
+    })
+
+    switch (response.status) {
+        case 200:
+            let file = response.result
+            console.log("ok", response.data.id)
+            return response.data.id
+        default:
+            console.error("err", response.error)
+            break
+    }
+
+    return false
 }
 
-MyDrive.uploadSong = async (file, filename) => {
-    try {
-        const createFile = await drive.files.create({
-            requestBody: {
-                name: `${filename}.mp3`,
-                mimeType: 'song/mp3',
-                parents: [FOLDERSONG]
-            },
-            media: {
-                mimeType: 'song/mp3',
-                body: bufferToStream(file.data)//fs.createReadStream(path.join('C:/Users/Hong Phuc/OneDrive - 01dhhp/Desktop/Android/New folder/music_api_android/Sau-Lung-Anh-Co-Ai-Kia-Thieu-Bao-Tram.mp3'))
-            }
-        })
-        //console.log(createFile.data)
-        switch (createFile.status) {
-            case 200:
-                {
-                    //console.log('OK', createFile.data.id);
-                    await that.setFilePublic(createFile.data.id);
-                    return createFile.data.id;
-                }
-            default: console.error("err", response.error); break;
+MyDrive.uploadSong = async(file, filename) => {
+    const driveService = google.drive({ version: 'v3', auth })
+
+    let fileMetaData = {
+        'name': filename + '.mp3',
+        'parents': [FOLDER_SONG]
+    }
+
+    let media = {
+        mimeType: 'song/mp3',
+        body: bufferToStream(file.data)
+    }
+
+    let response = await driveService.files.create({
+        resource: fileMetaData,
+        media: media,
+        fields: 'id'
+    })
+
+    switch (response.status) {
+        case 200:
+            let file = response.result
+            console.log("ok", response.data.id)
+            return response.data.id
+        default:
+            console.error("err", response.error)
+            break
+    }
+
+    return false
+}
+
+MyDrive.uploadMV = async(file, filename) => {
+    const driveService = google.drive({ version: 'v3', auth })
+
+    let fileMetaData = {
+        'name': filename + '.mp4',
+        'parents': [FOLDER_MV]
+    }
+
+    let media = {
+        mimeType: 'video/mp4',
+        body: bufferToStream(file.data)
+    }
+
+    let response = await driveService.files.create({
+        resource: fileMetaData,
+        media: media,
+        fields: 'id'
+    })
+
+    switch (response.status) {
+        case 200:
+            let file = response.result
+            console.log("ok", response.data.id)
+            return response.data.id
+        default:
+            console.error("err", response.error)
+            break
+    }
+
+    return false
+}
+
+function listFiles(auth) {
+    const drive = google.drive({ version: 'v3', auth })
+    drive.files.list({
+        pageSize: 10,
+        fields: 'nextPageToken, files(id, name)',
+    }, (err, res) => {
+        if (err) return console.log('The API returned an error: ' + err)
+        const files = res.data.files
+        if (files.length) {
+            console.log('Files:')
+            files.map((file) => {
+                console.log(`${file.name} (${file.id})`)
+                deleteFiles(auth, file.id)
+
+            })
+        } else {
+            console.log('No files found.')
         }
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
+    })
 }
 
-MyDrive.deleteSong = async (fileId) => {
-    try {
-        const deleteFile = await drive.files.delete({
-            fileId: fileId
-        })
-        //console.log(deleteFile.data, deleteFile.status);
-        return true;
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
-}
-
-MyDrive.uploadIMG = async (file, filename) => {
-    try {
-        const createFile = await drive.files.create({
-            requestBody: {
-                name: `${filename}.jpg`,
-                mimeType: 'image/jpg',
-                parents: [FOLDERIMG]
-            },
-            media: {
-                mimeType: 'image/jpg',
-                body: bufferToStream(file.data)//fs.createReadStream(path.join('C:/Users/Hong Phuc/OneDrive - 01dhhp/Desktop/Android/New folder/music_api_android/Sau-Lung-Anh-Co-Ai-Kia-Thieu-Bao-Tram.mp3'))
-            }
-        })
-        //console.log(createFile.data)
-        switch (createFile.status) {
-            case 200:
-                {
-                    //console.log('OK', createFile.data.id);
-                    await that.setFilePublic(createFile.data.id);
-                    return createFile.data.id;
-                }
-            default: console.error("err", response.error); break;
+MyDrive.deleteFile = (idFile) => {
+    const drive = google.drive({ version: 'v3', auth })
+    console.log("delete id: " + idFile)
+    drive.files.delete({
+        'fileId': idFile
+    }, (err, res) => {
+        if (err) {
+            console.log(err)
+            return false
+        } else {
+            // File k tồn tại thì vẫn ok
+            console.log("delete ok")
+            return true
         }
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
+    })
 }
 
-MyDrive.deleteIMG = async (fileId) => {
-    try {
-        const deleteFile = await drive.files.delete({
-            fileId: fileId
-        })
-        //console.log(deleteFile.data, deleteFile.status);
-        return true;
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
+MyDrive.getFileId = (path) => {
+    let pos = path.lastIndexOf('=')
+    return path.substr(pos + 1)
 }
 
-//Lấy id của song từ link
-MyDrive.getImageId = (path) => {
-    let pos = path.lastIndexOf('=');
-    return path.substr(pos + 1);
-}
-var that = module.exports = MyDrive;
+module.exports = MyDrive

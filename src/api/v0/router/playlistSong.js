@@ -7,7 +7,7 @@ const Account = require('../module/account')
 const Song = require('../module/song')
 const Album = require('../module/album')
 
-const getSong = async (idSong, idUser = -1) => {
+const getSong = async(idSong, idUser = -1) => {
     let song = await Song.getSong(idSong, idUser);
 
     let album = await Album.hasIdAlbum(song.id_album);
@@ -34,7 +34,7 @@ const getSong = async (idSong, idUser = -1) => {
     return song;
 }
 
-router.post('/:id_playlist/song/:id_song', Auth.authenGTUser, async (req, res, next) => {
+router.post('/:id_playlist/song/:id_song', Auth.authenGTUser, async(req, res, next) => {
     try {
         const id_song = req.params.id_song
         const id_playlist = req.params.id_playlist
@@ -71,7 +71,7 @@ router.post('/:id_playlist/song/:id_song', Auth.authenGTUser, async (req, res, n
 })
 
 
-router.delete('/:id_playlist/song/:id_song', Auth.authenGTUser, async (req, res, next) => {
+router.delete('/:id_playlist/song/:id_song', Auth.authenGTUser, async(req, res, next) => {
     try {
         const id_song = req.params.id_song
         const id_playlist = req.params.id_playlist
@@ -108,7 +108,7 @@ router.delete('/:id_playlist/song/:id_song', Auth.authenGTUser, async (req, res,
     }
 })
 
-router.get('/prominent', async (req, res, next) => {
+router.get('/prominent', async(req, res, next) => {
     try {
         const listPlaylist = await Playlist_Song.listPlaylistTotalListenSong()
         let songId
@@ -142,9 +142,10 @@ router.get('/prominent', async (req, res, next) => {
         res.sendStatus(500)
     }
 })
-router.get('/:id_playlist', async (req, res, next) => {
+
+router.get('/:id_playlist', async(req, res, next) => {
     let page = req.query.page
-    // const id_account = Auth.getTokenData(req).id_account
+        // const id_account = Auth.getTokenData(req).id_account
     const id_playlist = req.params.id_playlist
 
     try {
@@ -179,7 +180,7 @@ router.get('/:id_playlist', async (req, res, next) => {
     }
 })
 
-router.get('/', Auth.authenGTUser, async (req, res, next) => {
+router.get('/', Auth.authenGTUser, async(req, res, next) => {
     try {
         const page = req.query.page
         const id_account = Auth.getTokenData(req).id_account

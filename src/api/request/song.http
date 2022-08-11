@@ -1,5 +1,5 @@
 ### Test
-GET http://localhost:8000/api/v0/song/test
+POST http://localhost:8000/api/v0/song/noti
 Content-Type: application/json
 
 

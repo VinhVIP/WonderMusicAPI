@@ -6,7 +6,7 @@ const sendNotification = (message) => {
             console.log('a')
         })
         .catch((error) => {
-            console.log('b')
+            console.log(error)
         });
 
 }

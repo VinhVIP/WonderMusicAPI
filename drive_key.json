@@ -1,0 +1,12 @@
+{
+    "type": "service_account",
+    "project_id": "wonder-music-354815",
+    "private_key_id": "fcac10a58c10336d0e61e36cb1e2e920e021950f",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQChnNYrIZhURtoI\njHhIjT3BNdugqVywD5mZVYvTDCe1sYMYi8IhYomfNV/WIocIFUdcqo26tYHn+k93\nH4TWjvxeUwsvenNCN/iuNJZT3JUvJJ+qdfjJvds1YoV2bBE0nEt69HbdbtDchYMQ\nNZ37qWyow0LbFWx5csk9XQGy2kopYAMSL9oAqZFC8M79FFQNhC+GPfdxzk8Ij8of\niyY+ALNomAg1XYtrz3Rw+Z6pg4QvpKbaVkqXLtl5xMWy/O85EJ129Jk2KhZlQtHy\n6DcilHnwcRKbTRUoOYRLzsUq20KF90Va0IzlytRLBOkvAlGeYXzjaIETgBGVA4eQ\nUajJbDFTAgMBAAECggEAAK16If35W2b6/hAew5de1GXKmIxiWy8Z0RtGy7KyFWtY\nTuYCGdWhCMzq+MvVZOv5Ut9vJAAImelWBhIcy2JT0w/EOpdielvOIIIPyqqBJVYW\nKFMg7Tx6zkLkjC2qe9MAKPVSzBl4P0KYRK1wnxG4znrb4pOFEc2CbDAd5IwKLP41\nn824nUpWIIKSh5rt/BPsPKH+YOyFxUnoAWJ+ArSkypRn0Xf8ugX4W0nO0o5bEIMg\nfe9DsnMI/VJDHFJ7p0BMneoT1ABhctbd4oDR37iY77AgXHCkupZFHyxV5Q52GmpO\nagJSUykRuUcKEolW7aJIU4BpF0eAEhAyFMjbTdX/OQKBgQDboL7WBH8y4eVrQrXt\n+Xt85DdUVE+ibZyzOeqGmcOKaYtkC4WAJpqeVR5q/a5o2aCqcOAa6fy2ql7ZlBjy\nN/85T4QbzJAMSK1wgkVTrtZRmKVt2Wb1+q/kIm7G0yKVumrvGNEW2iYCflcoXjKP\nzct2QXFg2I+TEj2Xxgi067mgSwKBgQC8YH/rDJftgH5JElVOai7/FLHNTVD0Mltm\n15EIXtwjckPChIxfij+XmZPDJ4TT7K0YnBLwIQW+dei3UV34eZM5R7SjFBPCEywK\nXjC+dR4LYEUkICyHGn2T/qujGPaEUP06ipxzXdd4qvm9Foj/q+s0bqz304560IBo\nhPV+DFBeGQKBgDTbyjI+INMBNTMMejbNLaBQWNSt+gCQuv8TuFMu3LYKUucAMuA1\n6k6jE9ASQBCyGA4NXpJ7sDvSY0OgdiSNv5pufdAm+qBKOZvzbnYGhURcJax7f2FC\nNWUFuH2XwSIiHKxw35nNZQqCl716dlbP4+ERPRVe6acu464Mlnncpe9jAoGBAKST\nCi6oCfOM1sewJKclTXm88rmSWq99by0iF6tgdKLjKR+//YNanMQtgFJ3LCyaEX/2\nmvT/ZK1JBc9iXt6+GElqw/3VhI2BgnBsadl7KIx3xvAQy9Yc5qltTTZokLZ4q0OB\n5b1EtwLNHPJ9xaLY59we9S5uvYO+tPCbeH5u86fBAoGAEgHgEPtsNtuMJXfGPxXQ\nL4T6vz/kNitiYs4YvoG+0EyyyZ8PlgQZywTo3J1+eTr8Z2eLhS53Wky9iHt4cXqw\nMhLrfagCUUuyZ9wD5Mtl+bu3CY1IMXLvCPuGnfxX4DuKjkVVjdd/oZpPk3gIVAz5\nECm1cnqw2cVfHfsVWddv6hg=\n-----END PRIVATE KEY-----\n",
+    "client_email": "admin-wonder-music@wonder-music-354815.iam.gserviceaccount.com",
+    "client_id": "103418707674134595202",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/admin-wonder-music%40wonder-music-354815.iam.gserviceaccount.com"
+}

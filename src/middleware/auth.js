@@ -32,7 +32,7 @@ auth.getUserID = (req) => {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
             if (err) {
                 // Do nothing
-            }else{
+            } else {
                 idUser = data.id_account;
             }
         })
@@ -89,7 +89,9 @@ auth.getUserID = (req) => {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
             if (err) {
                 // Do nothing
-            }else{
+                // return res.sendStatus(403)
+                idUser = -1
+            } else {
                 idUser = data.id_account;
             }
         })

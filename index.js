@@ -5,7 +5,10 @@ const db = require('./src/database');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./src/swagger.json');
 const port = process.env.PORT || 8000;
+
 const apiUrl = '/api/v0';
+const apiUrlV1 = '/api/v1';
+
 const fileUpload = require('express-fileupload');
 
 
@@ -63,6 +66,22 @@ app.use(`${apiUrl}/song`, require('./src/api/v0/router/comment'))
 app.use(`${apiUrl}/notification`, require('./src/api/v0/router/notification'))
 app.use(`${apiUrl}/account-device`, require('./src/api/v0/router/account_device'))
 app.use(`${apiUrl}/search`, require('./src/api/v0/router/search'))
+
+
+// ------------- V1 ------------------
+
+app.use(`${apiUrlV1}/account`, require('./src/api/v1/router/account'))
+app.use(`${apiUrlV1}/album`, require('./src/api/v1/router/album'))
+app.use(`${apiUrlV1}/follow`, require('./src/api/v1/router/follow'))
+app.use(`${apiUrlV1}/notification`, require('./src/api/v1/router/notification'))
+app.use(`${apiUrlV1}/type`, require('./src/api/v1/router/type'))
+app.use(`${apiUrlV1}/song`, require('./src/api/v1/router/song'))
+app.use(`${apiUrlV1}/love`, require('./src/api/v1/router/love'))
+app.use(`${apiUrlV1}/playlist`, require('./src/api/v1/router/playlist'))
+app.use(`${apiUrlV1}/playlist_song`, require('./src/api/v1/router/playlistSong'))
+app.use(`${apiUrlV1}/comment`, require('./src/api/v1/router/comment'))
+app.use(`${apiUrlV1}/search`, require('./src/api/v1/router/search'))
+
 
 app.listen(port, () => {
     console.log(`Start website http://localhost:${port}`)
