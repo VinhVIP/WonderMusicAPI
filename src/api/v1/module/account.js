@@ -12,6 +12,17 @@ db.has = (id) => {
     })
 }
 
+db.getLockAccounts = () => {
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT A.id_account FROM account A
+        WHERE A.account_status=1`, [],
+            (err, result) => {
+                if (err) return reject(err);
+                return resolve(result.rows);
+            })
+    })
+}
+
 db.selectId = (idAccount, idUser = -1) => {
     return new Promise((resolve, reject) => {
         pool.query(`SELECT A.id_account, A.account_name, A.avatar, A.email, A.create_date, A.account_status, A.role,
@@ -235,6 +246,75 @@ db.hasDeviceToken = (id_account) => {
             if (err) return reject(err);
             return resolve(result.rowCount > 0 && result.rows[0].account_device != null && result.rows[0].account_device != '')
         })
+    })
+}
+
+db.hasEmailAccount = (email) => {
+    return new Promise((resolve, reject) => {
+        pool.query('SELECT id_account, account_name FROM account WHERE email = $1', [email],
+            (err, result) => {
+                if (err) return reject(err);
+                return resolve(result.rows[0]);
+            });
+    })
+}
+
+
+db.insertVerification = (id_account, code) => {
+    return new Promise((resolve, reject) => {
+        pool.query('INSERT INTO verification (id_account, code) values ($1,$2)', [id_account, code],
+            (err, result) => {
+                if (err) return reject(err);
+                return resolve(result.rows);
+            });
+    })
+}
+
+db.updateVerification = (id_account, code) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`UPDATE verification SET code=$1, create_time = timezone('Asia/Ho_Chi_Minh'::text, now()) WHERE id_account=$2`, [code, id_account],
+            (err, result) => {
+                if (err) return reject(err);
+                return resolve(result.rows);
+            });
+    })
+}
+
+db.isHasIdVerification = (id_account) => {
+    return new Promise((resolve, reject) => {
+        pool.query('SELECT id_account FROM verification WHERE id_account = $1', [id_account],
+            (err, result) => {
+                if (err) return reject(err);
+                return resolve(result.rowCount > 0);
+            });
+    })
+}
+db.isHasCodeAndEmail = (id_account, code) => {
+    return new Promise((resolve, reject) => {
+        pool.query('SELECT id_account FROM verification WHERE id_account = $1 AND code = $2', [id_account, code],
+            (err, result) => {
+                if (err) return reject(err);
+                return resolve(result.rowCount > 0);
+            });
+    })
+}
+db.checkTimeCode = (id_account) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT create_time + interval '${30}' minute >= timezone('Asia/Ho_Chi_Minh'::text, now()) AS valid FROM verification WHERE id_account = $1 ORDER BY create_time DESC LIMIT 1`, [id_account],
+            (err, result) => {
+                if (err) return reject(err);
+                return resolve(result.rows[0].valid);
+            });
+    })
+}
+
+db.deleteAccountVerification = (id_account) => {
+    return new Promise((resolve, reject) => {
+        pool.query('DELETE FROM verification WHERE id_account = $1', [id_account],
+            (err, result) => {
+                if (err) return reject(err);
+                return resolve(1);
+            })
     })
 }
 

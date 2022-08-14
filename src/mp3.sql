@@ -136,3 +136,12 @@ CREATE TABLE listen (
 	FOREIGN KEY (id_song) REFERENCES song(id_song) ON DELETE CASCADE,
 	FOREIGN KEY (id_account) REFERENCES account(id_account)
 );
+
+CREATE TABLE verification(
+	id_account serial,
+	code char(6) not null,
+	create_time timestamp without time zone default timezone('Asia/Ho_Chi_Minh'::text, now()),
+
+	PRIMARY KEY(id_account),
+	FOREIGN KEY (id_account) REFERENCES account(id_account)
+)

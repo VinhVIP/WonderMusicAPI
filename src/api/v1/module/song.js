@@ -146,7 +146,7 @@ db.singerOfSong = (idAccount, idSong) => {
 
 db.updateSong = (id_song, linkImage, song) => {
     return new Promise((resolve, reject) => {
-        pool.query("UPDATE song SET name_song = $1, lyrics= $3, description= $4, id_album= $5, image_song = $6 WHERE id_song = $7 RETURNING *", [song.name_song, '', song.lyrics, song.description, song.id_album, linkImage, id_song],
+        pool.query("UPDATE song SET name_song = $1, lyrics= $2, description= $3, id_album= $4, image_song = $5 WHERE id_song = $6 RETURNING *", [song.name_song, song.lyrics, song.description, song.id_album, linkImage, id_song],
             (err, result) => {
                 if (err) return reject(err);
                 return resolve(result.rows);

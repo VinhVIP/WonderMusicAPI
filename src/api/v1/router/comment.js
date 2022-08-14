@@ -310,12 +310,12 @@ router.delete('/:id_song/comment/:id_cmt/delete', Auth.authenGTUser, async(req, 
         const id_song = req.params.id_song
         const id_cmt = req.params.id_cmt
 
-        let acc = await Account.selectId(req)
+        let acc = await Account.selectId(id_account)
 
         // Tài khoản bị khóa
         if (acc.account_status != 0) {
             return res.status(403).json({
-                message: 'Tài khoản đã bị khóa, không thể xóabình luận'
+                message: 'Tài khoản đã bị khóa, không thể xóa bình luận'
             })
         }
 
@@ -336,7 +336,7 @@ router.delete('/:id_song/comment/:id_cmt/delete', Auth.authenGTUser, async(req, 
         let comment = await Comment.getComment(id_cmt)
         const id_account_comment = comment.id_account
 
-        if (+id_account === +id_account_comment) {
+        if (+id_account === +id_account_comment || acc.role === 1) {
             const comment = await Comment.delete(id_cmt)
             return res.status(200).json({
                 message: "Xóa bình luận thành công",

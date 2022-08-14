@@ -350,9 +350,7 @@ router.put('/:id', Auth.authenGTUser, async(req, res, next) => {
 
         let songExits = await Song.hasSong(idSong);
         if (songExits) {
-            let song = await Song.getSong(idSong);
-
-            if (acc == songExits.id_account) {
+            if (acc.id_account == songExits.id_account) {
 
                 let { name_song, lyrics, description, id_album, types, accounts } = req.body;
 
