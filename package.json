@@ -10,6 +10,10 @@
     },
     "author": "VinhVIP",
     "license": "ISC",
+    "engines": {
+        "node": "16.16.0",
+        "npm": "8.11.0"
+    },
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.20.0",
