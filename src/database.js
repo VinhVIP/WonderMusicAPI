@@ -6,20 +6,20 @@ pg.types.setTypeParser(1114, function(stringValue) {
 
 const Pool = pg.Pool
 
-const pool = new Pool({
-    host: 'localhost',
-    database: "wonder_music",
-    user: "postgres",
-    password: "123456",
-    port: 5432
-});
-
 // const pool = new Pool({
-//     connectionString: 'postgres://yqthabozijitzv:db66e40f9d9b05dce63703dd4083e53bd160101ba3fd9b147eedbb3ac500d033@ec2-3-223-169-166.compute-1.amazonaws.com:5432/de4s4iuukk0q07',
-//     ssl: {
-//         rejectUnauthorized: false
-//     }
+//     host: 'localhost',
+//     database: "wonder_music",
+//     user: "postgres",
+//     password: "123456",
+//     port: 5432
 // });
+
+const pool = new Pool({
+    connectionString: 'postgres://roilovezhlpkjc:34953c0f2a9d4948b31dc3fc8202153223d3a198797817f935999f2c683efeed@ec2-44-195-100-240.compute-1.amazonaws.com:5432/dcna5vs5mr3gm3',
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
 
 pool.on('error', (err) => {
     console.log("Error: " + err);
