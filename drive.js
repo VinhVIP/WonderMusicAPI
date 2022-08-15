@@ -33,7 +33,7 @@ MyDrive.uploadImage = async(file, filename) => {
     }
 
     let media = {
-        mimeType: 'image/jpeg',
+        mimeType: 'image/*',
         body: bufferToStream(file.data)
     }
 
@@ -65,7 +65,7 @@ MyDrive.uploadSong = async(file, filename) => {
     }
 
     let media = {
-        mimeType: 'song/mp3',
+        mimeType: 'audio/mpeg',
         body: bufferToStream(file.data)
     }
 
