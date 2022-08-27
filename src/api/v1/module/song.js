@@ -179,7 +179,7 @@ db.getListSongtype = (id_type, page) => {
 db.getBestSong = () => {
     return new Promise((resolve, reject) => {
         pool.query(`select song.id_song, count(listen_time) as total
-                from song left join listent on song.id_song = listen.id_song
+                from song left join listen on song.id_song = listen.id_song
                 group by song.id_song
                 order by total desc
                 limit 20 offset 0`,

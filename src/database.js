@@ -15,7 +15,7 @@ const Pool = pg.Pool
 // });
 
 const pool = new Pool({
-    connectionString: 'postgres://roilovezhlpkjc:34953c0f2a9d4948b31dc3fc8202153223d3a198797817f935999f2c683efeed@ec2-44-195-100-240.compute-1.amazonaws.com:5432/dbltrr6rcjgctc',
+    connectionString: 'postgres://vqiajhjomedmjz:34384d7a60dd1eb64387a50094180b8000361c418fc1ac7f01c08d7bc1b21d57@ec2-44-195-100-240.compute-1.amazonaws.com:5432/dbltrr6rcjgctc',
     ssl: {
         rejectUnauthorized: false
     }
