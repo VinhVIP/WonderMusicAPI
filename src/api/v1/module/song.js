@@ -178,7 +178,11 @@ db.getListSongtype = (id_type, page) => {
 //Lấy danh sách 20 bài hát nhiều lượt nghe nhất
 db.getBestSong = () => {
     return new Promise((resolve, reject) => {
-        pool.query("SELECT song.* FROM song ORDER BY song.listen DESC FETCH FIRST 100 ROWS ONLY",
+        pool.query(`select song.id_song, count(listen_time) as total
+                from song left join listent on song.id_song = listen.id_song
+                group by song.id_song
+                order by total desc
+                limit 20 offset 0`,
             (err, result) => {
                 if (err) return reject(err);
                 return resolve(result.rows);
