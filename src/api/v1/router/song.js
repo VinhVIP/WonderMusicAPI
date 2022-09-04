@@ -269,6 +269,7 @@ router.get('/top-listen', async(req, res, next) => {
         let data = []
         for (element of listBestSong) {
             let song = await getSong(element.id_song)
+            song['listen'] = element.total
             data.push(song)
         }
         return res.status(200).json({
