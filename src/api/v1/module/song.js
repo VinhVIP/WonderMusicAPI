@@ -4,7 +4,8 @@ const db = {}
 
 db.addSong = (id_account, linkSong, imgSong, song) => {
     return new Promise((resolve, reject) => {
-        pool.query("INSERT INTO song(id_account, name_song, link, lyrics,description, id_album, image_song) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [id_account, song.name_song, linkSong, song.lyrics, song.description, song.id_album, imgSong],
+        pool.query(`INSERT INTO song(id_account, name_song, link, lyrics,description, id_album, image_song) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`, [id_account, song.name_song, linkSong, song.lyrics, song.description, song.id_album, imgSong],
             (err, result) => {
                 if (err) return reject(err);
                 return resolve(result.rows[0]);
@@ -188,6 +189,36 @@ db.getBestSong = () => {
                 return resolve(result.rows);
             })
     })
+}
+
+db.getTopListenInRangeDate = (startDate, endDate, all) => {
+    if (all) {
+        return new Promise((resolve, reject) => {
+            pool.query(`select song.id_song, count(listen_time) as total
+                    from song left join listen on song.id_song = listen.id_song
+                    group by song.id_song
+                    order by total desc
+                    limit 100 offset 0`, [startDate, endDate],
+                (err, result) => {
+                    if (err) return reject(err);
+                    return resolve(result.rows);
+                })
+        })
+    } else {
+        return new Promise((resolve, reject) => {
+            pool.query(`select song.id_song, count(listen_time) as total
+                    from song left join listen on song.id_song = listen.id_song
+                    and listen_time::date >= $1 and listen_time::date <= $2
+                    group by song.id_song
+                    order by total desc
+                    limit 100 offset 0`, [startDate, endDate],
+                (err, result) => {
+                    if (err) return reject(err);
+                    return resolve(result.rows);
+                })
+        })
+    }
+
 }
 
 db.getTop10Days = () => {

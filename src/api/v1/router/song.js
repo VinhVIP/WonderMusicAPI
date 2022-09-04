@@ -251,6 +251,37 @@ router.get('/top-100', async(req, res, next) => {
 })
 
 /**
+ * Lấy top 100 bài hát có lượt nghe nhiều nhất trong 10 ngày gần đây
+ */
+router.get('/top-listen', async(req, res, next) => {
+    try {
+        let all = req.query.all
+        let startDate = req.query.start_date
+        let endDate = req.query.end_date
+        let listBestSong
+
+        if (+all === 1) {
+            listBestSong = await Song.getTopListenInRangeDate('', '', true);
+        } else {
+            listBestSong = await Song.getTopListenInRangeDate(startDate, endDate);
+        }
+
+        let data = []
+        for (element of listBestSong) {
+            let song = await getSong(element.id_song)
+            data.push(song)
+        }
+        return res.status(200).json({
+            message: `Lấy top 100 bài hát thành công có lượt nghe nhiều nhất từ ${startDate} đến ${endDate}`,
+            data: data,
+        })
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
+})
+
+/**
  * Lấy top 3 bài hát có lượt nghe nhiều nhất trong 10 ngày gần đây
  * Chi tiết số lượt nghe theo ngày
  */
