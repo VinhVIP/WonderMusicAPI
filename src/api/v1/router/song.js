@@ -256,20 +256,22 @@ router.get('/top-100', async(req, res, next) => {
 router.get('/top-listen', async(req, res, next) => {
     try {
         let all = req.query.all
+        let type = req.query.type
         let startDate = req.query.start_date
         let endDate = req.query.end_date
         let listBestSong
 
         if (+all === 1) {
-            listBestSong = await Song.getTopListenInRangeDate('', '', true);
+            listBestSong = await Song.getTopListenInRangeDate('', '', true, type);
         } else {
-            listBestSong = await Song.getTopListenInRangeDate(startDate, endDate);
+            listBestSong = await Song.getTopListenInRangeDate(startDate, endDate, false, type);
         }
 
         let data = []
         for (element of listBestSong) {
             let song = await getSong(element.id_song)
             song['listen'] = element.total
+            song['qtylove'] = element.qtylove
             data.push(song)
         }
         return res.status(200).json({

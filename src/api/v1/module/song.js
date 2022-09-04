@@ -191,32 +191,85 @@ db.getBestSong = () => {
     })
 }
 
-db.getTopListenInRangeDate = (startDate, endDate, all) => {
-    if (all) {
-        return new Promise((resolve, reject) => {
-            pool.query(`select song.id_song, count(listen_time) as total
-                    from song left join listen on song.id_song = listen.id_song
+db.getTopListenInRangeDate = (startDate, endDate, all, type) => {
+    if (!all) {
+        if (type === 'listen') {
+            return new Promise((resolve, reject) => {
+                pool.query(`select temp.id_song, temp.total, count(love_time) as qtylove from
+                (select song.id_song,  count(listen_time) as total
+                    from song
+                    left join listen on song.id_song = listen.id_song
+                        and listen_time::date >= $1 and listen_time::date <= $2
+                        group by song.id_song
+                ) as temp
+                left join love on temp.id_song = love.id_song and love_time::date >= $1 and love_time::date <= $2
+                group by temp.id_song, temp.total
+                order by total desc, qtylove desc
+                limit 100 offset 0`, [startDate, endDate],
+                    (err, result) => {
+                        if (err) return reject(err);
+                        return resolve(result.rows);
+                    })
+            })
+        } else {
+            // Love
+            return new Promise((resolve, reject) => {
+                pool.query(`select temp.id_song, temp.qtylove, count(listen_time) as total from
+                (select song.id_song,  count(love_time) as qtylove
+                from song
+                    left join love on song.id_song = love.id_song
+                    and love_time::date >= $1 and love_time::date <= $2
                     group by song.id_song
-                    order by total desc
-                    limit 100 offset 0`, [startDate, endDate],
-                (err, result) => {
-                    if (err) return reject(err);
-                    return resolve(result.rows);
-                })
-        })
+                ) as temp
+                left join listen on temp.id_song = listen.id_song
+                and listen_time::date >= $1 and listen_time::date <= $2
+                group by temp.id_song, temp.qtylove
+                order by  qtylove desc, total desc
+                limit 100 offset 0`, [startDate, endDate],
+                    (err, result) => {
+                        if (err) return reject(err);
+                        return resolve(result.rows);
+                    })
+            })
+        }
+
     } else {
-        return new Promise((resolve, reject) => {
-            pool.query(`select song.id_song, count(listen_time) as total
-                    from song left join listen on song.id_song = listen.id_song
-                    and listen_time::date >= $1 and listen_time::date <= $2
+        if (type === 'listen') {
+            return new Promise((resolve, reject) => {
+                pool.query(`select temp.id_song, temp.total, count(love_time) as qtylove from
+                (select song.id_song,  count(listen_time) as total
+                    from song
+                    left join listen on song.id_song = listen.id_song
                     group by song.id_song
-                    order by total desc
-                    limit 100 offset 0`, [startDate, endDate],
-                (err, result) => {
-                    if (err) return reject(err);
-                    return resolve(result.rows);
-                })
-        })
+                ) as temp
+                left join love on temp.id_song = love.id_song
+                group by temp.id_song, temp.total
+                order by total desc, qtylove desc
+                limit 100 offset 0`, [],
+                    (err, result) => {
+                        if (err) return reject(err);
+                        return resolve(result.rows);
+                    })
+            })
+        } else {
+            // Love
+            return new Promise((resolve, reject) => {
+                pool.query(`select temp.id_song, temp.qtylove, count(listen_time) as total from
+                (select song.id_song,  count(love_time) as qtylove
+                from song
+                    left join love on song.id_song = love.id_song
+                    group by song.id_song
+                ) as temp
+                left join listen on temp.id_song = listen.id_song
+                group by temp.id_song, temp.qtylove
+                order by  qtylove desc, total desc
+                limit 100 offset 0`, [],
+                    (err, result) => {
+                        if (err) return reject(err);
+                        return resolve(result.rows);
+                    })
+            })
+        }
     }
 
 }
